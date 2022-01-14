@@ -4,6 +4,7 @@ import Announcement from "../components/Announcement";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import NewsLetter from "../components/NewsLetter";
+import jeans from "../components/images/products/jeans.jpg"
 
 const Container = styled.div``;
 
@@ -17,7 +18,8 @@ const ImageContainer = styled.div`
 `;
 
 const Image = styled.img`
-  width: 100%;
+  margin-left: 50px;
+  width: 80%;
   height: 90vh;
   object-fir: cover;
 `;
@@ -116,10 +118,10 @@ const Product = () => {
       <Announcement />
       <Wrapper>
         <ImageContainer>
-          <Image src="" />
+          <Image src={jeans} />
         </ImageContainer>
         <InfoContainer>
-          <Title>Denim Shirt</Title>
+          <Title>Denim Pant</Title>
           <Description>
             A website that allows people to buy and sell physical goods, services, and digital products over the internet rather than at a brick-and-mortar location. Through an e-commerce website, a
             business can process orders, accept payments, manage shipping and logistics, and provide customer service.
