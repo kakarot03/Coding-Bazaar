@@ -6,7 +6,7 @@ const Container = styled.div`
     display : flex;
     align-items : center;
     justify-content : center;
-    fonr-size : 14px;
+    font-size : 14px;
     font-weight : 500;
     color : white;
 `
@@ -14,7 +14,7 @@ const Container = styled.div`
 const Announcement = () => {
     return (
         <Container>
-            Super Deal on Crocs !
+            Sathya the mass
         </Container>
     )
 }
