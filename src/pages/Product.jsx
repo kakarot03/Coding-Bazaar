@@ -21,7 +21,7 @@ const Image = styled.img`
   margin-left: 50px;
   width: 80%;
   height: 90vh;
-  object-fir: cover;
+  object-fit: cover;
 `;
 
 const InfoContainer = styled.div`
@@ -39,7 +39,7 @@ const Description = styled.p`
 
 const Price = styled.span`
   font-size: 40px;
-  fonr-weight: 100;
+  font-weight: 100;
 `;
 
 const FilterContainer = styled.div`

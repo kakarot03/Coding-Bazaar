@@ -26,7 +26,7 @@ display: flex;
 padding: 20px;
 align-items: center;
 justify-content: center;
-bakground-color: #f5fbfd;
+background-color: #f5fbfd;
 position: relative;
 
 &:hover ${Info}{

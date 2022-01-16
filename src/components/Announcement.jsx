@@ -14,7 +14,7 @@ const Container = styled.div`
 const Announcement = () => {
     return (
         <Container>
-            Sathya the mass
+            Super Deal on Crocs !
         </Container>
     )
 }
