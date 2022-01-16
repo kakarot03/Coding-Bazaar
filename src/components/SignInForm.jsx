@@ -2,8 +2,6 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import { Facebook, Pinterest, Mail } from "@material-ui/icons";
 import f1 from "./images/Sign In/f1.jpg";
-import video from "./images/Sign In/video.mp4";
-import SignInHeader from "./SignInHeader";
 
 const Container = styled.div`
   flex-direction: row;
