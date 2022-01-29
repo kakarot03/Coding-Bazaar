@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import Product from "./Product";
 import { popProducts } from "../data";
+import { useEffect, useState } from "react";
 
 const Container = styled.div`
   padding: 20px;
@@ -9,7 +10,15 @@ const Container = styled.div`
   justify-content: space-between;
 `;
 
-const Products = () => {
+const Products = ({cat, filters, sort}) => {
+
+  const [products, Setproducts] = useState([])
+  const [filteredProducts, SetFilteredProducts] = useState([])
+
+  useEffect(() => {
+    
+  }, [cat])
+
   return (
     <Container>
       {popProducts.map((item) => (

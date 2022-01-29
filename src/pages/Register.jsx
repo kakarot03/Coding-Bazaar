@@ -16,7 +16,7 @@ const Container = styled.div`
     height: 2000px;
     width: 2000px;
     top: -10%;
-    left: 48%;
+    right: 48%;
     transform: translateY(-50%);
     background-image: linear-gradient(-45deg, #4481eb 0%, #04befe 100%);
     transition: 1.8s ease-in-out;
@@ -32,7 +32,7 @@ const FormContainer = styled.div`
   width: 23%;
   display: grid;
   grid-template-columns: 1fr;
-  transform: translate(-50%, -50%);
+  transform: translate(180%, -50%);
   transition: 1s 0.7s ease-in-out;
   z-index: 5;
 `;
@@ -55,7 +55,7 @@ const Input = styled.input`
 `;
 
 const ButtonOne = styled.button`
-  background-color: #3b98f0;
+  background-color: #4481eb;
   cursor: pointer;
   margin-top: 25px;
   width: 28%;
@@ -126,8 +126,8 @@ const SocialIcon = styled.div`
 const PanelContainer = styled.div`
   position: absolute;
   width: 30%;
-  top: 9%;
-  right: 15%;
+  top: 12%;
+  left: 10%;
   z-index: 6;
 `;
 
@@ -142,28 +142,30 @@ const StyledLogo = styled(Logo)`
 `;
 
 const handleClick = (action) => {
-  if (action === "signin") {
+  if (action === "login") {
   } else {
   }
 };
 
-export const Login = () => {
+export const Register = () => {
   return (
     <Container>
       <PanelContainer className="wrapper">
-        <Title>New Here?</Title>
+        <Title>One of Us?</Title>
         <Description>Lorem ipsum asde xvdjsm akqhe saden sajkqe ashab</Description>
-        <ButtonTwo onClick={() => handleClick("signin")}>SIGN UP</ButtonTwo>
+        <ButtonTwo>Sign In</ButtonTwo>
         <StyledLogo />
       </PanelContainer>
       <FormContainer>
-        <Title>Sign in</Title>
+        <Title>Sign up</Title>
+        <Input placeholder="Username" />
         <Input placeholder="Email" />
         <Input placeholder="Password" type="password" />
-        <Link to="/register" style={{textDecoration: "none"}}> 
-          <ButtonOne>Login</ButtonOne>
+        <Input placeholder="Confirm Password" type="password" />
+        <Link to="/login" style={{textDecoration: "none"}}>
+          <ButtonOne>Sign up</ButtonOne>
         </Link>
-        <Description>Or sign in with</Description>
+        <Description>Or sign up with</Description>
         <SocialContainer>
           <SocialIcon color="3B5999">
             <Facebook />
