@@ -4,15 +4,19 @@ import Announcement from "../components/Announcement";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import NewsLetter from "../components/NewsLetter";
-import jeans from "../components/images/products/jeans.jpg"
-import { mobile } from "../responsive"
+import { addProduct } from "../redux/cartRedux";
+import { mobile } from "../responsive";
+import { publicRequest } from "../request";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 const Container = styled.div``;
 
 const Wrapper = styled.div`
   padding: 50px;
   display: flex;
-  ${mobile({padding: "10px", flexDirection: "column"})}
+  ${mobile({ padding: "10px", flexDirection: "column" })}
 `;
 
 const ImageContainer = styled.div`
@@ -20,17 +24,16 @@ const ImageContainer = styled.div`
 `;
 
 const Image = styled.img`
-  margin-left: 50px;
-  width: 80%;
-  height: 90vh;
+  width: 100%;
+  height: 70vh;
   object-fit: cover;
-  ${mobile({height: "40vh"})}
+  ${mobile({ height: "40vh" })}
 `;
 
 const InfoContainer = styled.div`
   flex: 1;
   padding: 0px 50px;
-  ${mobile({padding: "10px"})}
+  ${mobile({ padding: "10px" })}
 `;
 
 const Title = styled.h1`
@@ -51,7 +54,7 @@ const FilterContainer = styled.div`
   justify-content: space-between;
   width: 50%;
   margin: 30px 0px;
-  ${mobile({width: "100%"})}
+  ${mobile({ width: "100%" })}
 `;
 
 const Filter = styled.div`
@@ -85,7 +88,7 @@ const AddContainer = styled.div`
   width: 50%;
   align-items: center;
   justify-content: space-between;
-  ${mobile({width: "100%"})}
+  ${mobile({ width: "100%" })}
 `;
 
 const AmountContainer = styled.div`
@@ -118,46 +121,79 @@ const Button = styled.button`
 `;
 
 const Product = () => {
+  const location = useLocation();
+  const id = location.pathname.split("/")[2];
+  const [product, setProduct] = useState({});
+  const [quantity, setQuantity] = useState(1);
+  const [color, setColor] = useState("");
+  const [size, setSize] = useState("");
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const getProduct = async () => {
+      try {
+        const res = await publicRequest.get("/products/find/" + id);
+        setProduct(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getProduct();
+  }, [id]);
+
+  const handleQuantity = (type) => {
+    if (type === "dec") {
+      quantity > 1 && setQuantity(quantity - 1);
+    } else {
+      setQuantity(quantity + 1);
+    }
+  };
+
+  const handleClick = () => {
+    dispatch(
+      addProduct({ ...product, quantity, color, size })
+    );
+  };
+
+  const sizeArray = []
+  sizeArray.push(product.size)
+
   return (
     <Container>
       <Navbar />
       <Announcement />
       <Wrapper>
         <ImageContainer>
-          <Image src={jeans} />
+          <Image src={product.img} />
         </ImageContainer>
         <InfoContainer>
-          <Title>Denim Pant</Title>
+          <Title>{product.title}</Title>
           <Description>
             A website that allows people to buy and sell physical goods, services, and digital products over the internet rather than at a brick-and-mortar location. Through an e-commerce website, a
             business can process orders, accept payments, manage shipping and logistics, and provide customer service.
           </Description>
-          <Price>$20</Price>
+          <Price>
+            {`\u20B9`} {product.price}
+          </Price>
           <FilterContainer>
             <Filter>
-              <FilterTitle>Color</FilterTitle>
-              <FilterColor color="black" />
-              <FilterColor color="darkblue" />
-              <FilterColor color="gray" />
+            <FilterTitle>Color</FilterTitle>
+              <FilterColor color={product.color} key={product.color} onClick={() => setColor(product.color)} />
             </Filter>
             <Filter>
               <FilterTitle>Size</FilterTitle>
-              <FilterSize>
-                <FilterSizeOption>XS</FilterSizeOption>
-                <FilterSizeOption>S</FilterSizeOption>
-                <FilterSizeOption>M</FilterSizeOption>
-                <FilterSizeOption>L</FilterSizeOption>
-                <FilterSizeOption>XL</FilterSizeOption>
+              <FilterSize onChange={(e) => setSize(e.target.value)}>
+                  <FilterSizeOption key={product.size}>{product.size}</FilterSizeOption>
               </FilterSize>
             </Filter>
           </FilterContainer>
           <AddContainer>
             <AmountContainer>
-              <Remove />
-              <Amount>1</Amount>
-              <Add />
+              <Remove onClick={() => handleQuantity("dec")} />
+              <Amount>{quantity}</Amount>
+              <Add onClick={() => handleQuantity("inc")} />
             </AmountContainer>
-            <Button>Add To Cart</Button>
+            <Button onClick={handleClick}>Add To Cart</Button>
           </AddContainer>
         </InfoContainer>
       </Wrapper>

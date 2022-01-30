@@ -2,6 +2,7 @@ import styled from "styled-components";
 import Product from "./Product";
 import { popProducts } from "../data";
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 const Container = styled.div`
   padding: 20px;
@@ -10,22 +11,35 @@ const Container = styled.div`
   justify-content: space-between;
 `;
 
-const Products = ({cat, filters, sort}) => {
-
-  const [products, Setproducts] = useState([])
-  const [filteredProducts, SetFilteredProducts] = useState([])
+const Products = ({ cat, filters, sort }) => {
+  const [products, setproducts] = useState([]);
+  const [filteredProducts, SetFilteredProducts] = useState([]);
 
   useEffect(() => {
-    
-  }, [cat])
+    const getProducts = async () => {
+      try {
+        const res = await axios.get(cat ? `http://localhost:5000/api/products?category=${cat}` : "http://localhost:5000/api/products");
+        setproducts(res.data);
+      } catch (err) {}
+    };
+    getProducts();
+  }, [cat]);
 
-  return (
-    <Container>
-      {popProducts.map((item) => (
-        <Product item={item} key={item.id} />
-      ))}
-    </Container>
-  );
+  useEffect(() => {
+    cat && SetFilteredProducts(products.filter((item) => Object.entries(filters).every(([key, value]) => item[key].includes(value))));
+  }, [products, cat, filters]);
+
+  useEffect(() => {
+    if (sort === "newest") {
+      SetFilteredProducts((prev) => [...prev].sort((a, b) => a.createdAt - b.createdAt));
+    } else if (sort === "asc") {
+      SetFilteredProducts((prev) => [...prev].sort((a, b) => a.price - b.price));
+    } else {
+      SetFilteredProducts((prev) => [...prev].sort((a, b) => b.price - a.price));
+    }
+  }, [sort]);
+
+  return <Container>{cat ? filteredProducts.map((item) => <Product item={item} key={item.id} />) : products.slice(0, 8).map((item) => <Product item={item} key={item.id} />)}</Container>;
 };
 
 export default Products;

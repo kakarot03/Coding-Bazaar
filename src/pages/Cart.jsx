@@ -2,14 +2,20 @@ import styled from "styled-components";
 import Announcement from "../components/Announcement";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
-import jeans from "../components/images/products/jeans.jpg";
+import StripeCheckout from "react-stripe-checkout";
 import { Add, Remove } from "@material-ui/icons";
 import { mobile } from "../responsive";
+import { useSelector } from "react-redux";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+const KEY = process.env.REACT_APP_STRIPE
 
 const Container = styled.div``;
+
 const Wrapper = styled.div`
   padding: 20px;
-  ${mobile({padding: "10px"})}
+  ${mobile({ padding: "10px" })}
 `;
 
 const Title = styled.h1`
@@ -34,9 +40,8 @@ const TopButton = styled.button`
 `;
 
 const TopTexts = styled.div`
-  ${mobile({display: "none"})}
+  ${mobile({ display: "none" })}
 `;
-
 const TopText = styled.span`
   text-decoration: underline;
   cursor: pointer;
@@ -46,7 +51,7 @@ const TopText = styled.span`
 const Bottom = styled.div`
   display: flex;
   justify-content: space-between;
-  ${mobile({flexDirection: "column"})}
+  ${mobile({ flexDirection: "column" })}
 `;
 
 const Info = styled.div`
@@ -56,7 +61,7 @@ const Info = styled.div`
 const Product = styled.div`
   display: flex;
   justify-content: space-between;
-  ${mobile({flexDirection: "column"})}
+  ${mobile({ flexDirection: "column" })}
 `;
 
 const ProductDetail = styled.div`
@@ -91,9 +96,9 @@ const ProductSize = styled.span``;
 const PriceDetail = styled.div`
   flex: 1;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
 `;
 
 const ProductAmountContainer = styled.div`
@@ -103,15 +108,15 @@ const ProductAmountContainer = styled.div`
 `;
 
 const ProductAmount = styled.div`
-  font-size: 23px;
+  font-size: 24px;
   margin: 5px;
-  ${mobile({margin: "20px "})}
+  ${mobile({ margin: "5px 15px" })}
 `;
 
 const ProductPrice = styled.div`
-  font-size: 27px;
+  font-size: 30px;
   font-weight: 200;
-  ${mobile({marginBottom: "20px"})}
+  ${mobile({ marginBottom: "20px" })}
 `;
 
 const Hr = styled.hr`
@@ -125,19 +130,19 @@ const Summary = styled.div`
   border: 0.5px solid lightgray;
   border-radius: 10px;
   padding: 20px;
-  height: 47vh;
+  height: 50vh;
 `;
 
 const SummaryTitle = styled.h1`
-    font-weight: 200;
+  font-weight: 200;
 `;
 
 const SummaryItem = styled.div`
-    margin: 30px 0px;
-    display: flex;
-    justify-content: space-between;
-    font-weight: ${props => props.type === "total" && "500"};
-    font-size: ${props => props.type === "total" && "24px"};
+  margin: 30px 0px;
+  display: flex;
+  justify-content: space-between;
+  font-weight: ${(props) => props.type === "total" && "500"};
+  font-size: ${(props) => props.type === "total" && "24px"};
 `;
 
 const SummaryItemText = styled.span``;
@@ -145,14 +150,23 @@ const SummaryItemText = styled.span``;
 const SummaryItemPrice = styled.span``;
 
 const Button = styled.button`
-    width: 100%;
-    padding: 10px;
-    background-color: black;
-    font-weight: 600;
-    color: white;
+  width: 100%;
+  padding: 10px;
+  background-color: black;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
 `;
 
 const Cart = () => {
+  const cart = useSelector((state) => state.cart);
+  const [stripeToken, setStripeToken] = useState(null);
+  const history = useNavigate();
+
+  const onToken = (token) => {
+    setStripeToken(token);
+  };
+
   return (
     <Container>
       <Navbar />
@@ -169,77 +183,71 @@ const Cart = () => {
         </Top>
         <Bottom>
           <Info>
-            <Product>
-              <ProductDetail>
-                <Image src={jeans} />
-                <Details>
-                  <ProductName>
-                    <b>Product:</b> Jessie Thunder Shoes
-                  </ProductName>
-                  <ProductId>
-                    <b>ID:</b> 140924
-                  </ProductId>
-                  <ProductColor color="black" />
-                  <ProductSize>
-                    <b>Size:</b> 29.5
-                  </ProductSize>
-                </Details>
-              </ProductDetail>
-              <PriceDetail>
-                <ProductAmountContainer>
-                  <Add />
-                  <ProductAmount>2</ProductAmount>
-                  <Remove />
-                </ProductAmountContainer>
-                <ProductPrice>Rs. 1999</ProductPrice>
-              </PriceDetail>
-            </Product>
+            {cart.products.map((product) => (
+              <Product key={product.title}>
+                <ProductDetail>
+                  <Image src={product.img} />
+                  <Details>
+                    <ProductName>
+                      <b>Product:</b> {product.title}
+                    </ProductName>
+                    <ProductId>
+                      <b>ID:</b> {product._id}
+                    </ProductId>
+                    <ProductColor color={product.color} />
+                    <ProductSize>
+                      <b>Size:</b> {product.size}
+                    </ProductSize>
+                  </Details>
+                </ProductDetail>
+                <PriceDetail>
+                  <ProductAmountContainer>
+                    <Add />
+                    <ProductAmount>{product.quantity}</ProductAmount>
+                    <Remove />
+                  </ProductAmountContainer>
+                  <ProductPrice>$ {product.price * product.quantity}</ProductPrice>
+                </PriceDetail>
+              </Product>
+            ))}
             <Hr />
-            <Product>
-              <ProductDetail>
-                <Image src={jeans} />
-                <Details>
-                  <ProductName>
-                    <b>Product:</b> Jessie Thunder Shoes
-                  </ProductName>
-                  <ProductId>
-                    <b>ID:</b> 140924
-                  </ProductId>
-                  <ProductColor color="black" />
-                  <ProductSize>
-                    <b>Size:</b> 29.5
-                  </ProductSize>
-                </Details>
-              </ProductDetail>
-              <PriceDetail>
-                <ProductAmountContainer>
-                  <Add />
-                  <ProductAmount>2</ProductAmount>
-                  <Remove />
-                </ProductAmountContainer>
-                <ProductPrice>Rs. 1999</ProductPrice>
-              </PriceDetail>
-            </Product>
           </Info>
           <Summary>
-            <SummaryTitle>Order Summary</SummaryTitle>
+            <SummaryTitle>ORDER SUMMARY</SummaryTitle>
             <SummaryItem>
               <SummaryItemText>Subtotal</SummaryItemText>
-              <SummaryItemPrice>Rs. 3000</SummaryItemPrice>
+              <SummaryItemPrice>
+                {`\u20B9`}
+                {cart.total}
+              </SummaryItemPrice>
             </SummaryItem>
             <SummaryItem>
-              <SummaryItemText>Shipping</SummaryItemText>
-              <SummaryItemPrice>Rs. 40</SummaryItemPrice>
+              <SummaryItemText>Estimated Shipping</SummaryItemText>
+              <SummaryItemPrice>{`\u20B9`}80</SummaryItemPrice>
             </SummaryItem>
             <SummaryItem>
-              <SummaryItemText>Discount</SummaryItemText>
-              <SummaryItemPrice>Rs. 30</SummaryItemPrice>
+              <SummaryItemText>Shipping Discount</SummaryItemText>
+              <SummaryItemPrice>{`\u20B9`}-76</SummaryItemPrice>
             </SummaryItem>
             <SummaryItem type="total">
               <SummaryItemText>Total</SummaryItemText>
-              <SummaryItemPrice>Rs. 3010</SummaryItemPrice>
+              <SummaryItemPrice>
+                {`\u20B9`}
+                {cart.total}
+              </SummaryItemPrice>
             </SummaryItem>
-            <Button>CheckOut Now</Button>
+            <StripeCheckout
+              name="Lama Shop"
+              image="https://avatars.githubusercontent.com/u/1486366?v=4"
+              billingAddress
+              shippingAddress
+              description={`Your total is $${cart.total}`}
+              amount={cart.total * 100}
+              token={onToken}
+              stripeKey={KEY}
+            >
+              <Button>CheckOut Now</Button>
+            </StripeCheckout>
           </Summary>
         </Bottom>
       </Wrapper>

@@ -4,15 +4,17 @@ import { Login } from "./pages/Login";
 import { Register } from "./pages/Register";
 import Cart from "./pages/Cart";
 import ProductList from "./pages/ProductList";
-import { BrowserRouter, Route, Router, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 
 function App() {
+  const user = true;
+  // const user = useSelector((state) => state.user.currentUser);
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />}></Route>
-        <Route path="/login" element={<Login />}></Route>
-        <Route path="/register" element={<Register />}></Route>
+        <Route path="/login" element={user ? <Navigate to="/" /> : <Login />}></Route>
+        <Route path="/register" element={user ? <Navigate to="/" /> : <Register />}></Route>
         <Route path="/products/:category" element={<ProductList />}></Route>
         <Route path="/product/:id" element={<Product />}></Route>
         <Route path="/cart" element={<Cart />}></Route>

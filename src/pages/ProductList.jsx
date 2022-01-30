@@ -57,18 +57,18 @@ const ProductList = () => {
     <Container>
       <Navbar />
       <Announcement />
-      <Title>Dresses</Title>
+      <Title>{cat}</Title>
       <FilterContainer>
         <Filter>
           <FilterText>Filter Products</FilterText>
           <Select name="color" onChange={handleFilters}>
             <Option disabled>Color</Option>
-            <Option>Red</Option>
-            <Option>Black</Option>
-            <Option>Yellow</Option>
-            <Option>Blue</Option>
-            <Option>Green</Option>
-            <Option>White</Option>
+            <Option>red</Option>
+            <Option>black</Option>
+            <Option>yellow</Option>
+            <Option>blue</Option>
+            <Option>green</Option>
+            <Option>grey</Option>
           </Select>
           <Select name="size" onChange={handleFilters}>
             <Option disabled>Size</Option>
