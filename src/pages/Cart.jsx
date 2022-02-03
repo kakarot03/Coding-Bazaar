@@ -6,7 +6,7 @@ import StripeCheckout from "react-stripe-checkout";
 import { Add, Remove } from "@material-ui/icons";
 import { mobile } from "../responsive";
 import { useSelector } from "react-redux";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const KEY = process.env.REACT_APP_STRIPE
@@ -202,9 +202,9 @@ const Cart = () => {
                 </ProductDetail>
                 <PriceDetail>
                   <ProductAmountContainer>
-                    <Add />
+                    <Add/>
                     <ProductAmount>{product.quantity}</ProductAmount>
-                    <Remove />
+                    <Remove/>
                   </ProductAmountContainer>
                   <ProductPrice>$ {product.price * product.quantity}</ProductPrice>
                 </PriceDetail>

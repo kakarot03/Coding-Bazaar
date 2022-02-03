@@ -5,10 +5,10 @@ import { Register } from "./pages/Register";
 import Cart from "./pages/Cart";
 import ProductList from "./pages/ProductList";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function App() {
-  const user = true;
-  // const user = useSelector((state) => state.user.currentUser);
+  const user = useSelector((state) => state.user.currentUser);
   return (
     <BrowserRouter>
       <Routes>

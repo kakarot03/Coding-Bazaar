@@ -85,7 +85,7 @@ const ButtonTwo = styled.button`
   color: #4481eb;
   display: block;
 
-  &:hover{
+  &:hover {
     background-color: #4481eb;
     color: #f8f5f5;
   }
@@ -153,7 +153,9 @@ export const Register = () => {
       <PanelContainer className="wrapper">
         <Title>One of Us?</Title>
         <Description>Lorem ipsum asde xvdjsm akqhe saden sajkqe ashab</Description>
-        <ButtonTwo>Sign In</ButtonTwo>
+        <Link to="/login" style={{ textDecoration: "none" }}>
+          <ButtonTwo>Sign In</ButtonTwo>
+        </Link>
         <StyledLogo />
       </PanelContainer>
       <FormContainer>
@@ -162,9 +164,7 @@ export const Register = () => {
         <Input placeholder="Email" />
         <Input placeholder="Password" type="password" />
         <Input placeholder="Confirm Password" type="password" />
-        <Link to="/login" style={{textDecoration: "none"}}>
-          <ButtonOne>Sign up</ButtonOne>
-        </Link>
+        <ButtonOne>Sign up</ButtonOne>
         <Description>Or sign up with</Description>
         <SocialContainer>
           <SocialIcon color="3B5999">

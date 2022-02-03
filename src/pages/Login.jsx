@@ -2,6 +2,10 @@ import { Facebook, GitHub, Instagram, Twitter } from "@material-ui/icons";
 import { ReactComponent as Logo } from "../components/images/Login/login.svg";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../redux/apiCalls";
+const CryptoJS = require("crypto-js");
 
 const Container = styled.div`
   position: relative;
@@ -67,6 +71,11 @@ const ButtonOne = styled.button`
   border-radius: 50px;
   color: white;
   display: block;
+
+  &:disabled {
+    color: #3b98f0;
+    cursor: not-allowed;
+  }
 `;
 
 const ButtonTwo = styled.button`
@@ -85,7 +94,7 @@ const ButtonTwo = styled.button`
   color: #4481eb;
   display: block;
 
-  &:hover{
+  &:hover {
     background-color: #4481eb;
     color: #f8f5f5;
   }
@@ -141,6 +150,10 @@ const StyledLogo = styled(Logo)`
   transition-delay: 0.4s;
 `;
 
+const Error = styled.span`
+color: red;
+`;
+
 const handleClick = (action) => {
   if (action === "signin") {
   } else {
@@ -148,21 +161,32 @@ const handleClick = (action) => {
 };
 
 export const Login = () => {
+  const [username, setUserName] = useState("");
+  const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
+  const { isFetching, error } = useSelector((state) => state.user);
+
+  const handleClick = (e) => {
+    e.preventDefault();
+    login(dispatch, { username: username, password });
+  };
+
   return (
     <Container>
       <PanelContainer className="wrapper">
         <Title>New Here?</Title>
         <Description>Lorem ipsum asde xvdjsm akqhe saden sajkqe ashab</Description>
-        <ButtonTwo onClick={() => handleClick("signin")}>SIGN UP</ButtonTwo>
+        <Link to="/register" style={{ textDecoration: "none" }}>
+          <ButtonTwo>SIGN UP</ButtonTwo>
+        </Link>
         <StyledLogo />
       </PanelContainer>
       <FormContainer>
         <Title>Sign in</Title>
-        <Input placeholder="Email" />
-        <Input placeholder="Password" type="password" />
-        <Link to="/register" style={{textDecoration: "none"}}> 
-          <ButtonOne>Login</ButtonOne>
-        </Link>
+        <Input placeholder="Email" onChange={(e) => setUserName(e.target.value)} />
+        <Input placeholder="Password" type="password" onChange={(e) => setPassword(e.target.value)} />
+        <ButtonOne onClick={handleClick} disabled={isFetching}>Login</ButtonOne>
+        {error && <Error>Something went wrong...</Error>}
         <Description>Or sign in with</Description>
         <SocialContainer>
           <SocialIcon color="3B5999">
