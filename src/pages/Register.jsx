@@ -2,6 +2,9 @@ import { Facebook, GitHub, Instagram, Twitter } from "@material-ui/icons";
 import { ReactComponent as Logo } from "../components/images/Login/login.svg";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { register } from "../redux/apiCalls";
 
 const Container = styled.div`
   position: relative;
@@ -141,6 +144,10 @@ const StyledLogo = styled(Logo)`
   transition-delay: 0.4s;
 `;
 
+const Error = styled.span`
+  color: red;
+`;
+
 const handleClick = (action) => {
   if (action === "login") {
   } else {
@@ -148,6 +155,18 @@ const handleClick = (action) => {
 };
 
 export const Register = () => {
+  const [username, setUserName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const { isFetching, error } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+
+  const handleClick = (e) => {
+    e.preventDefault();
+    // register(dispatch, { username: username, password });
+  };
+
   return (
     <Container>
       <PanelContainer className="wrapper">
@@ -160,11 +179,12 @@ export const Register = () => {
       </PanelContainer>
       <FormContainer>
         <Title>Sign up</Title>
-        <Input placeholder="Username" />
-        <Input placeholder="Email" />
-        <Input placeholder="Password" type="password" />
-        <Input placeholder="Confirm Password" type="password" />
-        <ButtonOne>Sign up</ButtonOne>
+        <Input placeholder="Username" onChange={(e) => setUserName(e.target.value)} />
+        <Input placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
+        <Input placeholder="Password" type="password" onChange={(e) => setPassword(e.target.value)} />
+        <Input placeholder="Confirm Password" type="password" onChange={(e) => setConfirmPassword(e.target.value)} />
+        <ButtonOne onClick={handleClick}>Sign up</ButtonOne>
+        {error && <Error>Something went wrong...</Error>}
         <Description>Or sign up with</Description>
         <SocialContainer>
           <SocialIcon color="3B5999">
